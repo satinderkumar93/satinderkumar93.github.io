@@ -1,0 +1,147 @@
+{% load static %}
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <!-- development version, includes helpful console warnings -->
+        <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+        <title>{% block title %}QueReka - A Q&A website for students{% endblock %}</title>
+    </head>
+    <body class="bg-dark">
+    
+    
+    
+        <!------  navbar ------>
+
+        <section class="border-bottom">
+            <nav class="navbar navbar-expand-sm">
+
+
+                <a href="" class="navbar-brand text-uppercase text-secondary font-weight-bold ml-3">QueReka</a>
+
+                <button class="navbar-toggler bg-light" type="button" data-toggle="collapse" data-target="#center-links">
+                    <div class="bg-dark line1"></div>
+                    <div class="bg-dark line2"></div>
+                    <div class="bg-dark line3"></div>
+                </button>
+
+
+                <div class="collapse navbar-collapse text-center" id="center-links">
+
+                    <ul class="navbar-nav col-md-9 justify-content-md-center">
+                        <li class="nav-item mr-md-2 mr-lg-5">
+                            <a class="nav-link text-secondary" href="/">Home</a>
+                        </li>
+                        <li class="nav-item mr-md-2 mr-lg-5">
+                            <a class="nav-link text-secondary" href="/leaderboard">Leaderboard</a>
+                        </li>
+                        
+                        <li class="nav-item mr-md-2 mr-lg-5">
+                            <a class="nav-link text-secondary" href="#" target="_blank">Source Code</a>
+                        </li>
+                        <li class="nav-item mr-md-2 mr-lg-5">
+                            <a class="nav-link text-secondary" href="/about">About</a>
+                        </li>
+                    </ul>    
+
+                    <ul class="navbar-nav col-md-3 justify-content-md-center">
+
+                        {% if current_user.is_authenticated %}
+                            <li>
+                                <a href="/accounts/logout" class="text-secondary">Log out ({{current_user.username}}, {{current_user.points}} points)</a> 
+                            </li>
+
+                        {% else %}
+                            <li class="nav-item mr-2">
+                                <a class="nav-link text-secondary" href="/accounts/signup">LogIn / SignUp</a>
+                            </li> 
+                        {% endif %}
+
+
+                    </ul>
+
+                </div>
+
+            </nav>
+        </section>
+
+        <!-------  end of  navbar --------->
+<!---- content container --->
+
+        <div class="container" style="max-width:700">
+            <div class="card shadow-sm" style="margin-top: 20px">
+                <div class="card-header">
+                    <h6 style="margin-bottom: 0; margin-top: 7; display: inline-block">
+                        <a href="/" class="text-dark">QueReka
+                            {% if not current_user.is_authenticated %}
+                            <span class="site-title-second-half"> - An open-source Q&A website for coders</span>
+                            {% endif %}
+                        </a>
+                    </h6>
+                    <span style="float: right">
+                        <span class="quereka-nav">
+                            <a href="{% url 'search' %}" class="text-dark">Search</a> |
+                            {% if current_user.is_authenticated %}
+                            <a href="{% url 'my-questions' %}" class="text-dark">My Questions</a> |
+                            <a href="{% url 'my-answers' %}" class="text-dark">My Answers</a> |
+                            {% endif %}
+                            <a href="/question/new" class="text-dark" style="display: inline-block">
+                                New Question
+                            </a>
+                        </span>
+                    </span>
+                </div>
+                <div class="pb-2 pt-4 pr-4 pl-4">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    
+    <!----- end of content container ------>
+
+
+
+        <!-- ------ footer ------- -->
+        <section class="mt-5 bottom border-top">
+
+            <div class="container-fluid bg-dark py-2">
+                <div class="row justify-content-center">
+                    <ul class="list-inline">
+                        <li class="list-inline-item mr-3">
+                          <a href="/" class="text-secondary text-decoration-none">Home</a>
+                        </li>
+                        <li class="list-inline-item mr-3">
+                          <a href="#" target="_blank" class="text-secondary text-decoration-none">Source Code</a>
+                        </li>
+                        <li class="list-inline-item mr-3">
+                          <a href="/about" class="text-secondary text-decoration-none">About</a>
+                        </li>
+                      </ul>
+                </div>
+                <div class="row justify-content-center">
+                    <div>
+                        <p class="">&copy; 2020 Copyright @ <span class="text-success">Rk</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ------ end of footer ------- -->
+</body>
+    <script>
+        axios.defaults.xsrfCookieName = 'csrftoken';
+        axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+    </script>
+    
+    <!-- Scripts for Bootstrap -->
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+</html>
